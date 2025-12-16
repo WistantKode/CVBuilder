@@ -2,7 +2,7 @@
 
 Une application web moderne et interactive pour créer, personnaliser et exporter votre Curriculum Vitae en quelques clics. Construite avec les dernières technologies web : Next.js 15, React 19 et Tailwind CSS.
 
-![Aperçu de CV Builder](/preview.png)
+![Aperçu de CV Builder](/public/preview.png)
 
 
 ## 🚀 Fonctionnalités

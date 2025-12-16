@@ -1,16 +1,16 @@
 "use client"
 import { Eye, RotateCw, Save } from "lucide-react";
 import Image from "next/image";
-import PersonalDetailsForm from "./components/PersonalDetailsForm";
+import PersonalDetailsForm from "@/components/PersonalDetailsForm";
 import { useEffect, useRef, useState } from "react";
 import { Education, Experience, Hobby, Language, PersonalDetails, Skill } from "@/type";
 import { educationsPreset, experiencesPreset, hobbiesPreset, languagesPreset, personalDetailsPreset, skillsPreset } from "@/presets";
-import CVPreview from "./components/CVPreview";
-import ExperienceForm from "./components/ExperienceForm";
-import EducationForm from "./components/EducationForm";
-import LanguageForm from "./components/LanguageForm";
-import SkillForm from "./components/SkillForm";
-import HobbyForm from "./components/HobbyForm";
+import CVPreview from "@/components/CVPreview";
+import ExperienceForm from "@/components/ExperienceForm";
+import EducationForm from "@/components/EducationForm";
+import LanguageForm from "@/components/LanguageForm";
+import SkillForm from "@/components/SkillForm";
+import HobbyForm from "@/components/HobbyForm";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import confetti from "canvas-confetti"

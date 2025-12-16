@@ -1,15 +1,10 @@
+import { useCV } from '@/context/CVContext';
 import { Experience } from '@/type';
 import { Plus } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-type Props = {
-    experience: Experience[];
-    setExperiences: (experience: Experience[]) => void
-}
-
-
-
-const ExperienceForm: React.FC<Props> = ({ experience, setExperiences }) => {
+const ExperienceForm: React.FC = () => {
+    const { experiences, setExperiences } = useCV();
 
     const [newExperience, setNewExperience] = useState<Experience>({
         jobTitle: '',
@@ -17,41 +12,39 @@ const ExperienceForm: React.FC<Props> = ({ experience, setExperiences }) => {
         startDate: '',
         endDate: '',
         description: '',
-    })
+    });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fied: keyof Experience) => {
-        setNewExperience({ ...newExperience, [fied]: e.target.value })
-    }
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        field: keyof Experience
+    ) => {
+        setNewExperience({ ...newExperience, [field]: e.target.value });
+    };
 
     const handleAddExperience = () => {
-        setExperiences([...experience, newExperience])
-        setNewExperience(
-            {
-                jobTitle: '',
-                companyName: '',
-                startDate: '',
-                endDate: '',
-                description: '',
-            }
-        )
-    }
-
-
+        setExperiences([...experiences, newExperience]);
+        setNewExperience({
+            jobTitle: '',
+            companyName: '',
+            startDate: '',
+            endDate: '',
+            description: '',
+        });
+    };
 
     return (
-
         <div>
             <div className='flex flex-col gap-4'>
                 <div className='flex justify-between'>
                     <input
-                        type="text"
+                        type='text'
                         placeholder='Nom complet'
                         value={newExperience.jobTitle}
                         onChange={(e) => handleChange(e, 'jobTitle')}
                         className='input input-bordered w-full'
                     />
                     <input
-                        type="text"
+                        type='text'
                         placeholder="Nom de l'entreprise"
                         value={newExperience.companyName}
                         onChange={(e) => handleChange(e, 'companyName')}
@@ -61,22 +54,22 @@ const ExperienceForm: React.FC<Props> = ({ experience, setExperiences }) => {
 
                 <div className='flex justify-between'>
                     <input
-                        type="text"
+                        type='text'
                         placeholder='Date de début'
-                        onFocus={(e) => e.target.type = "date"}
+                        onFocus={(e) => (e.target.type = 'date')}
                         onBlur={(e) => {
-                            if (!e.target.value) e.target.type = "text"
+                            if (!e.target.value) e.target.type = 'text';
                         }}
                         value={newExperience.startDate}
                         onChange={(e) => handleChange(e, 'startDate')}
                         className='input input-bordered w-full'
                     />
                     <input
-                        type="text"
+                        type='text'
                         placeholder='Date de fin'
-                        onFocus={(e) => e.target.type = "date"}
+                        onFocus={(e) => (e.target.type = 'date')}
                         onBlur={(e) => {
-                            if (!e.target.value) e.target.type = "text"
+                            if (!e.target.value) e.target.type = 'text';
                         }}
                         value={newExperience.endDate}
                         onChange={(e) => handleChange(e, 'endDate')}
@@ -91,16 +84,12 @@ const ExperienceForm: React.FC<Props> = ({ experience, setExperiences }) => {
                 ></textarea>
             </div>
 
-            <button
-                onClick={handleAddExperience}
-                className='btn btn-primary mt-4'
-            >
+            <button onClick={handleAddExperience} className='btn btn-primary mt-4'>
                 Ajouter
                 <Plus className='w-4' />
             </button>
-
         </div>
-    )
-}
+    );
+};
 
-export default ExperienceForm
+export default ExperienceForm;

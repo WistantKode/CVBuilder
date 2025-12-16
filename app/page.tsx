@@ -1,139 +1,81 @@
 "use client"
 import { Eye, RotateCw, Save } from "lucide-react";
 import Image from "next/image";
-import PersonalDetailsForm from "@/components/PersonalDetailsForm";
-import { useEffect, useRef, useState } from "react";
-import { Education, Experience, Hobby, Language, PersonalDetails, Skill } from "@/type";
-import { educationsPreset, experiencesPreset, hobbiesPreset, languagesPreset, personalDetailsPreset, skillsPreset } from "@/presets";
-import CVPreview from "@/components/CVPreview";
-import ExperienceForm from "@/components/ExperienceForm";
-import EducationForm from "@/components/EducationForm";
-import LanguageForm from "@/components/LanguageForm";
-import SkillForm from "@/components/SkillForm";
-import HobbyForm from "@/components/HobbyForm";
+import { useRef, useState } from "react";
+import CVPreview from "@/components/preview/CVPreview";
+import PersonalDetailsForm from "@/components/editor/PersonalDetailsForm";
+import ExperienceForm from "@/components/editor/ExperienceForm";
+import EducationForm from "@/components/editor/EducationForm";
+import LanguageForm from "@/components/editor/LanguageForm";
+import SkillForm from "@/components/editor/SkillForm";
+import HobbyForm from "@/components/editor/HobbyForm";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import confetti from "canvas-confetti"
+import { useCV } from "@/context/CVContext";
 
 export default function Home() {
-  const [personalDetails, setPersonalDetails] = useState<PersonalDetails>(personalDetailsPreset)
-  const [file, setFile] = useState<File | null>(null)
-  const [theme, setTheme] = useState<string>('cupcake')
+  const {
+    theme,
+    setTheme,
+    resetPersonalDetails,
+    resetExperiences,
+    resetEducations,
+    resetLanguages,
+    resetSkills,
+    resetHobbies
+  } = useCV();
+
   const [zoom, setZoom] = useState<number>(163)
-  const [experiences, setExperience] = useState<Experience[]>(experiencesPreset)
-  const [educations, setEducations] = useState<Education[]>(educationsPreset)
-  const [languages, setLanguages] = useState<Language[]>(languagesPreset)
-  const [skills, setSkills] = useState<Skill[]>(skillsPreset)
-  const [hobbies, setHobbies] = useState<Hobby[]>(hobbiesPreset);
-
-  useEffect(() => {
-    const defaultImageUrl = '/profile.jpg'
-    fetch(defaultImageUrl)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const defaultFile = new File([blob], "profile.jpg", { type: blob.type })
-
-        setFile(defaultFile)
-
-      })
-  }, [])
+  const cvPreviewRef = useRef<HTMLDivElement>(null)
 
   const themes = [
-    "light",
-    "dark",
-    "cupcake",
-    "bumblebee",
-    "emerald",
-    "corporate",
-    "synthwave",
-    "retro",
-    "cyberpunk",
-    "valentine",
-    "halloween",
-    "garden",
-    "forest",
-    "aqua",
-    "lofi",
-    "pastel",
-    "fantasy",
-    "wireframe",
-    "black",
-    "luxury",
-    "dracula",
-    "cmyk",
-    "autumn",
-    "business",
-    "acid",
-    "lemonade",
-    "night",
-    "coffee",
-    "winter",
-    "dim",
-    "nord",
-    "sunset",
+    "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave",
+    "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua",
+    "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula",
+    "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee",
+    "winter", "dim", "nord", "sunset",
   ]
-
-  const handleResetPersonalDetails = () => setPersonalDetails(
-    {
-      fullName: '',
-      email: '',
-      phone: '',
-      address: '',
-      photoUrl: '',
-      postSeeking: '',
-      description: ''
-    }
-  )
-
-  const handleResetExperiences = () => setExperience([])
-  const handleResetEducations = () => setEducations([])
-  const handleResetLanguages = () => setLanguages([])
-  const handleResetSkills = () => setSkills([])
-  const handleResetHobbies = () => setHobbies([]);
-
-  const cvPreviewRef = useRef(null)
 
   const handleDownloadPdf = async () => {
     const element = cvPreviewRef.current
-    if(element){
+    if (element) {
       try {
-
-        const canvas = await html2canvas(element , {
-          scale : 3,
+        const canvas = await html2canvas(element as HTMLElement, {
+          scale: 3,
           useCORS: true,
         })
         const imgData = canvas.toDataURL('image/png')
 
         const pdf = new jsPDF({
-          orientation:"portrait",
-          unit:'mm',
-          format:"A4"
+          orientation: "portrait",
+          unit: 'mm',
+          format: "A4"
         })
-        
+
         const pdfWidth = pdf.internal.pageSize.getWidth()
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width 
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width
 
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.save(`cv.pdf`)
 
         const modal = document.getElementById('my_modal_3') as HTMLDialogElement
-        if(modal){
+        if (modal) {
           modal.close()
         }
 
         confetti({
-             particleCount: 100,
-             spread: 70 ,
-             origin: {y:0.6},
-             zIndex:9999
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          zIndex: 9999
         })
 
       } catch (error) {
-         console.error('Erreur lors de la génération du PDF :', error);
+        console.error('Erreur lors de la génération du PDF :', error);
       }
     }
   }
-
 
   return (
     <div>
@@ -159,60 +101,47 @@ export default function Home() {
               <div className="flex justify-between items-center">
                 <h1 className="badge badge-primary badge-outline">Qui êtes-vous ?</h1>
                 <button
-                  onClick={handleResetPersonalDetails}
+                  onClick={resetPersonalDetails}
                   className="btn btn-primary btn-sm">
                   <RotateCw className="w-4" />
                 </button>
               </div>
 
-              <PersonalDetailsForm
-                personalDetails={personalDetails}
-                setPersonalDetails={setPersonalDetails}
-                setFile={setFile}
-              />
+              <PersonalDetailsForm />
 
               <div className="flex justify-between items-center">
                 <h1 className="badge badge-primary badge-outline">Expériences</h1>
                 <button
-                  onClick={handleResetExperiences}
+                  onClick={resetExperiences}
                   className="btn btn-primary btn-sm">
                   <RotateCw className="w-4" />
                 </button>
               </div>
 
-              <ExperienceForm
-                experience={experiences}
-                setExperiences={setExperience}
-              />
+              <ExperienceForm />
 
 
               <div className="flex justify-between items-center">
                 <h1 className="badge badge-primary badge-outline">Éducations</h1>
                 <button
-                  onClick={handleResetEducations}
+                  onClick={resetEducations}
                   className="btn btn-primary btn-sm">
                   <RotateCw className="w-4" />
                 </button>
               </div>
 
-              <EducationForm
-                educations={educations}
-                setEducations={setEducations}
-              />
+              <EducationForm />
 
               <div className="flex justify-between items-center">
                 <h1 className="badge badge-primary badge-outline">Langues</h1>
                 <button
-                  onClick={handleResetLanguages}
+                  onClick={resetLanguages}
                   className="btn btn-primary btn-sm">
                   <RotateCw className="w-4" />
                 </button>
               </div>
 
-              <LanguageForm
-                languages={languages}
-                setLanguages={setLanguages}
-              />
+              <LanguageForm />
 
               <div className="flex justify-between">
 
@@ -220,37 +149,30 @@ export default function Home() {
                   <div className="flex justify-between items-center">
                     <h1 className="badge badge-primary badge-outline">Compétences</h1>
                     <button
-                      onClick={handleResetSkills}
+                      onClick={resetSkills}
                       className="btn btn-primary btn-sm">
                       <RotateCw className="w-4" />
                     </button>
                   </div>
-                  <SkillForm skills={skills} setSkills={setSkills} />
+                  <SkillForm />
                 </div>
 
                 <div className="ml-4 w-1/2">
                   <div className="flex justify-between items-center">
                     <h1 className="badge badge-primary badge-outline">Loisirs</h1>
                     <button
-                      onClick={handleResetHobbies}
+                      onClick={resetHobbies}
                       className="btn btn-primary btn-sm">
                       <RotateCw className="w-4" />
                     </button>
                   </div>
-                  <HobbyForm hobbies={hobbies} setHobbies={setHobbies} />
+                  <HobbyForm />
                 </div>
-
-
-
               </div>
-
-
             </div>
-
           </div>
 
           <div className="w-2/3 h-full bg-base-100 bg-[url('/file.svg')] bg-cover  bg-center scrollable-preview relative">
-
 
             <div className="flex items-center justify-center fixed z-[9999] top-5 right-5">
               <input
@@ -281,25 +203,12 @@ export default function Home() {
                 transform: `scale(${zoom / 200})`
               }}
             >
-              <CVPreview
-                personalDetails={personalDetails}
-                file={file}
-                theme={theme}
-                experiences={experiences}
-                educations={educations}
-                languages={languages}
-                hobbies={hobbies}
-                skills={skills}
-
-              />
+              <CVPreview />
             </div>
 
           </div>
 
         </section>
-
-
-
 
         <dialog id="my_modal_3" className="modal">
           <div className="modal-box w-full max-w-6xl mx-auto px-4 sm;px-6 lg:px-8">
@@ -319,17 +228,8 @@ export default function Home() {
               <div className="w-full max-x-full overflow-auto">
                 <div className="w-full max-w-full flex justify-center items-center">
                   <CVPreview
-                    personalDetails={personalDetails}
-                    file={file}
-                    theme={theme}
-                    experiences={experiences}
-                    educations={educations}
-                    languages={languages}
-                    hobbies={hobbies}
-                    skills={skills}
                     download={true}
                     ref={cvPreviewRef}
-
                   />
                 </div>
               </div>

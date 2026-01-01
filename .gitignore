@@ -102,3 +102,6 @@ next-env.d.ts
 !SECURITY.md
 !LICENSE
 !PULL_REQUEST_TEMPLATE.md
+!PLAN.md
+!REFACTOR.md
+!ASSIST.md

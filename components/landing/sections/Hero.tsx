@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import LandingButton from "../atoms/LandingButton";
 import FloatingIcon from "../atoms/FloatingIcon";
 import Image from "next/image";
+import Link from "next/link";
 import { Check } from "lucide-react";
 
 export default function Hero() {
@@ -46,12 +47,14 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-col items-center gap-6"
           >
-            <LandingButton variant="primary" size="lg" className="bg-[#10b981] hover:bg-[#059669] px-12 py-5 h-auto text-lg flex items-center gap-3">
-              Commencer à gérer mes CV Gratuitement
-              <svg className="w-5 h-5 bg-white/20 rounded-full p-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-              </svg>
-            </LandingButton>
+            <Link href="/builder">
+              <LandingButton variant="primary" size="lg" className="bg-[#10b981] hover:bg-[#059669] px-12 py-5 h-auto text-lg flex items-center gap-3">
+                Commencer à gérer mes CV Gratuitement
+                <svg className="w-5 h-5 bg-white/20 rounded-full p-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                </svg>
+              </LandingButton>
+            </Link>
             
             <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-2 text-sm font-semibold text-slate-400">
               <div className="flex items-center gap-2">

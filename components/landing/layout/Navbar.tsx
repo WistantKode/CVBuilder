@@ -36,27 +36,23 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
-          <Link
-            href="/login"
-            className="text-[15px] font-bold text-slate-700 hover:text-[#10b981] transition-colors px-4"
-          >
-            Se connecter
-          </Link>
-          <LandingButton 
-            variant="secondary" 
-            className="bg-[#012a2b] hover:bg-[#023e3f] py-3.5 h-auto flex items-center gap-2 group"
-          >
-            Commecer
-            <svg 
-              className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
+        <div className="flex items-center">
+          <Link href="/builder">
+            <LandingButton 
+              variant="secondary" 
+              className="bg-[#012a2b] hover:bg-[#023e3f] py-3.5 h-auto flex items-center gap-2 group"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-            </svg>
-          </LandingButton>
+              Créer mon CV
+              <svg 
+                className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+              </svg>
+            </LandingButton>
+          </Link>
         </div>
       </div>
     </nav>
